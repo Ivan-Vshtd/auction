@@ -1,0 +1,45 @@
+
+<div class="col-md-6">
+  <h2 style="font-style: italic; margin-left: 3%">User Details</h2>
+  <table mat-table [(dataSource)]="users" class="mat-elevation-z8">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- firstName Column -->
+    <ng-container matColumnDef="firstName">
+      <th mat-header-cell *matHeaderCellDef> firstName </th>
+      <td mat-cell *matCellDef="let user"> {{user.firstName}} </td>
+    </ng-container>
+
+    <!-- lastName Column -->
+    <ng-container matColumnDef="lastName">
+      <th mat-header-cell *matHeaderCellDef> lastName </th>
+      <td mat-cell *matCellDef="let user"> {{user.lastName}} </td>
+    </ng-container>
+
+    <!-- email Column -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef> Email </th>
+      <td mat-cell *matCellDef="let user"> {{user.email}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef> </th>
+      <td mat-cell *matCellDef="let user">
+        <button *ngIf="crntUser() == 'admin'" mat-button (click)="deleteUser(user)">Delete User</button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef>  </th>
+      <td mat-cell *matCellDef="let user">
+        <button *ngIf="crntUser() == 'admin'" mat-button (click)="editUser(user)">Edit User</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  <button mat-raised-button class="addBtn" (click)="addUser()">Registration</button>
+</div>

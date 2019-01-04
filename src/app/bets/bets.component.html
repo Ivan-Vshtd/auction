@@ -1,0 +1,66 @@
+
+<div class="col-md-6">
+  <h2 style="font-style: italic; margin-left: 3%">Bets</h2>
+  <!--<p style="font-style: italic;  margin-left: 3%">Current User: {{crntUser}}</p>-->
+  <table mat-table [(dataSource)]="bets" class="mat-elevation-z8">
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <!-- id Column -->
+    <ng-container matColumnDef="viewId">
+      <th mat-header-cell *matHeaderCellDef> № </th>
+      <td mat-cell *matCellDef="let bet"> {{bet.viewId}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="authorName">
+      <th mat-header-cell *matHeaderCellDef> owner </th>
+      <td mat-cell *matCellDef="let bet"> {{bet.authorName}}</td>
+    </ng-container>
+
+    <!-- text Column -->
+    <ng-container matColumnDef="text">
+      <th mat-header-cell *matHeaderCellDef> text </th>
+      <td mat-cell *matCellDef="let bet"> {{bet.text}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef> </th>
+      <td mat-cell *matCellDef="let bet">
+        <button *ngIf="bet.authorName == crntUser()" mat-button (click)="deleteBet(bet)">Delete Bet</button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="edit">
+      <th mat-header-cell *matHeaderCellDef>  </th>
+      <td mat-cell *matCellDef="let bet">
+        <button *ngIf="bet.authorName == crntUser()" mat-button (click)="editBet(bet)">Edit Bet</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+
+<mat-card class="example-card">
+  <mat-card-header>
+    <mat-card-title>Bet form</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup]="valueForm" (ngSubmit)="onSubmit()">
+      <table class="example-full-width" cellspacing="0">
+        <tr>
+          <td><mat-form-field class="example-full-width">
+            <input matInput placeholder="Text" formControlName="text" name="text" required>
+          </mat-form-field></td>
+        </tr>
+      </table>
+      <mat-card-actions>
+        <button mat-button>Save</button>
+      </mat-card-actions>
+    </form>
+  </mat-card-content>
+</mat-card>
+<!--*ngIf="bet.authorName == crntUser()"-->

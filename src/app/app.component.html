@@ -1,0 +1,15 @@
+<mat-toolbar class="tool-bar">
+  <mat-toolbar-row>
+    <span><img src="../../assets/logopng.png" style="height: 55px; width: auto"></span>
+    <span class="example-fill-remaining-space"></span>
+    <span class="example-spacer"></span>
+    <button mat-raised-button class="tbBtn" (click)="auctions()">Open Auctions</button>
+    <button mat-raised-button class="tbBtn" (click)="users()">Users</button>
+    <button mat-raised-button class="tbBtn" (click)="logOut()">Log out</button>
+    <span style="font-style: italic; margin-left: 0.5%">user: {{crntUser()}}</span>
+    <!--<button mat-button>About</button>
+    <button mat-button>Contact</button>-->
+  </mat-toolbar-row>
+</mat-toolbar>
+<router-outlet></router-outlet>
+
