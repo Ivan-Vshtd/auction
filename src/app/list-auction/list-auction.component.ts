@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-
-;
 import {AuctionService} from '../service/auctions.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
+import {Auction} from '../models/auction.model';
 
 @Component({
   selector: 'app-list-auction',
@@ -13,10 +12,13 @@ import {Router} from '@angular/router';
 export class ListAuctionComponent implements OnInit {
 
   auctions;
-  displayedColumns: string[] = ['viewId', 'authorName', 'name', 'join'];
+  displayedColumns: string[] = ['viewId', 'authorName', 'name', 'lastBet', 'join', 'delete'];
   valueForm: FormGroup;
 
-  constructor(private auctionService: AuctionService, private formBuilder: FormBuilder, private router: Router) {
+  constructor(
+    private auctionService: AuctionService,
+    private formBuilder: FormBuilder,
+    private router: Router) {
   }
 
   ngOnInit() {
@@ -33,7 +35,8 @@ export class ListAuctionComponent implements OnInit {
       id: [],
       viewId: [],
       authorName: [],
-      name: ['', Validators.required]
+      name: ['', Validators.required],
+      description: ['', Validators.required]
     });
   }
 
@@ -48,8 +51,20 @@ export class ListAuctionComponent implements OnInit {
         });
   }
 
+  deleteAuction(auction: Auction): void {
+    this.auctionService
+      .deleteAuction(auction.id)
+      .subscribe(data => {
+        this.auctions = this.auctions.filter(requiredAuction => requiredAuction !== auction);
+      });
+  }
+
   join(id: string) {
     localStorage.setItem('currentAuction', id);
     this.router.navigate(['list-auctions/' + id]);
+  }
+
+  crntUser(): string {
+    return localStorage.getItem('currentUser');
   }
 }

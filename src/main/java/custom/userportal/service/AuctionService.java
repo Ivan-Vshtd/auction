@@ -1,7 +1,9 @@
 package custom.userportal.service;
 
 import custom.userportal.domain.Auction;
+import custom.userportal.domain.Bet;
 import custom.userportal.repo.AuctionRepository;
+import custom.userportal.repo.BetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -17,6 +19,9 @@ public class AuctionService {
 
   @Autowired
   AuctionRepository auctionRepository;
+
+  @Autowired
+  BetService betService;
 
   public Flux<Auction> findAll()
   {
@@ -41,7 +46,7 @@ public class AuctionService {
     return auctionRepository.save(auction);
   }
 
-  public Mono<Auction> editBet(String id, Auction auction) {
+  public Mono<Auction> editAuction(String id, Auction auction) {
     auction.setId(id);
     return auctionRepository.save(auction);
   }
@@ -49,9 +54,16 @@ public class AuctionService {
   public Mono<Auction> delete(String id) {
     Mono<Auction> auction = findById(id);
     if (auction != null){
-      auctionRepository.delete(auction.block()).subscribe();
+      auction
+      .subscribe(requiredAu -> {
+        betService
+          .findAllRequiredBets(requiredAu.getId())
+          .toIterable()
+          .forEach(
+            bet -> betService.delete(bet.getId()).subscribe());
+        auctionRepository.delete(requiredAu).subscribe();
+      }); //and delete all relative bets (TODO: needs try to find valid way!!)
     }
     return auction;
   }
-
 }

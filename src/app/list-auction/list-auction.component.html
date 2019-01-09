@@ -24,12 +24,31 @@
       <td mat-cell *matCellDef="let auction"> {{auction.name}} </td>
     </ng-container>
 
+    <ng-container matColumnDef="lastBet">
+      <th mat-header-cell *matHeaderCellDef> last bet </th>
+      <td mat-cell *matCellDef="let auction">
+        <div *ngIf="auction.lastBet; else not_started">
+        {{auction.lastBet}}
+        </div>
+        <ng-template #not_started>
+          not yet started
+        </ng-template>
+      </td> <!--will be added via socket-->
+    </ng-container>
+
     <!-- text Column -->
     <ng-container matColumnDef="join">
-      <th mat-header-cell *matHeaderCellDef> join </th>
+      <th mat-header-cell *matHeaderCellDef>  </th>
 
       <td mat-cell *matCellDef="let auction">
         <button mat-button (click)="join(auction.id)">join</button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef> </th>
+      <td mat-cell *matCellDef="let auction">
+        <button *ngIf="crntUser() == 'admin'" mat-button (click)="deleteAuction(auction)">Delete Auction</button>
       </td>
     </ng-container>
 
@@ -47,9 +66,18 @@
     <form [formGroup]="valueForm" (ngSubmit)="onSubmit()">
       <table class="example-full-width" cellspacing="0">
         <tr>
-          <td><mat-form-field class="example-full-width">
+          <td>
+            <mat-form-field class="example-full-width">
             <input matInput placeholder="Name" formControlName="name" name="name" required>
-          </mat-form-field></td>
+          </mat-form-field>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Description" formControlName="description" name="description" required>
+            </mat-form-field>
+          </td>
         </tr>
       </table>
       <mat-card-actions>

@@ -1,9 +1,11 @@
-import {AfterContentInit, Component, OnInit} from '@angular/core';
+import {AfterContentInit, AfterViewInit, Component, OnInit} from '@angular/core';
 import {Bet} from '../models/bet.model';
 import {BetsService} from '../service/bets.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {first} from 'rxjs/operators';
 import {addHandler, connect} from '../../app/util/ws.js';
+import {AuctionService} from '../service/auctions.service';
+import {Auction} from '../models/auction.model';
 
 @Component({
   selector: 'app-bets',
@@ -16,18 +18,24 @@ export class BetsComponent implements OnInit, AfterContentInit {
   displayedColumns: string[] = ['viewId', 'authorName', 'text', 'edit', 'delete'];
   valueForm: FormGroup;
   betId;
+  auction: Auction;
 
-  constructor(private betsService: BetsService, private formBuilder: FormBuilder) {
+  constructor(private betsService: BetsService, private auctionService: AuctionService, private formBuilder: FormBuilder) {
     connect();
   }
 
   ngOnInit() {
     this.fillTheForm();
+    this.auctionService
+      .getAuctionById(localStorage.getItem('currentAuction'))
+      .subscribe(data => this.auction = data);
+
     this.betsService
       .getRequiredBets(localStorage.getItem('currentAuction'))
       .subscribe(data => {
         this.bets = data;
       });
+
   }
 
   ngAfterContentInit(): void {
@@ -116,5 +124,4 @@ export class BetsComponent implements OnInit, AfterContentInit {
       auctionId: ['', Validators.required]
     });
   }
-
 }

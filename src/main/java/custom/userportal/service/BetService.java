@@ -1,6 +1,8 @@
 package custom.userportal.service;
 
+import custom.userportal.domain.Auction;
 import custom.userportal.domain.Bet;
+import custom.userportal.repo.AuctionRepository;
 import custom.userportal.repo.BetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,9 @@ public class BetService {
   @Autowired
   BetRepository betRepository;
 
+  @Autowired
+  AuctionRepository auctionRepository;
+
   public Flux<Bet> findAll() {
     return betRepository.findAll();
   }
@@ -27,15 +32,13 @@ public class BetService {
   }
 
   public Mono<Bet> addBet(Bet bet) {
-    long lastViewId = betRepository                        //just to generate valid numbers of bets
-                                .findAllByAuctionId(bet.getAuctionId())
-                                .toStream()
-                                .map(Bet::getViewId)
-                                .map(Long::valueOf)
-                                .max(Long::compareTo)
-                                .orElse(0L);
-
-    bet.setViewId(String.valueOf(lastViewId + 1));
+    bet.setViewId(String.valueOf(lastViewId(bet.getAuctionId()) + 1));
+    auctionRepository
+      .findById(bet.getAuctionId())
+      .subscribe(au -> {
+        au.setLastBet(bet.getText());
+        auctionRepository.save(au).subscribe();
+      });
 
     return betRepository.save(bet);
   }
@@ -55,5 +58,14 @@ public class BetService {
 
   public Flux<Bet> findAllRequiredBets(String auId) {
     return betRepository.findAllByAuctionId(auId);
+  }
+
+  private Long lastViewId(String id){
+    return findAllRequiredBets(id)
+                               .toStream()
+                               .map(Bet::getViewId)
+                               .map(Long::valueOf)
+                               .max(Long::compareTo)
+                               .orElse(0L);
   }
 }

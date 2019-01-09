@@ -1,6 +1,22 @@
 
 <div class="col-md-6">
-  <h2 style="font-style: italic; margin-left: 3%">Bets</h2>
+
+  <mat-card *ngIf="auction" class="example-card">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>{{auction.name}}</mat-card-title>
+      <mat-card-subtitle>Owner: {{auction.authorName}}</mat-card-subtitle>
+    </mat-card-header>
+    <!--<img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">-->
+    <mat-card-content>
+        {{auction.description}}
+    </mat-card-content>
+   <!-- <mat-card-actions>
+      <button mat-button>LIKE</button>
+      <button mat-button>SHARE</button>
+    </mat-card-actions>-->
+  </mat-card>
+
   <!--<p style="font-style: italic;  margin-left: 3%">Current User: {{crntUser}}</p>-->
   <table mat-table [(dataSource)]="bets" class="mat-elevation-z8">
 

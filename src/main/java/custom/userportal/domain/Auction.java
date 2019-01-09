@@ -16,6 +16,8 @@ public class Auction {
   private String viewId;
   private String name;
   private String authorName;
+  private String description;
+  private String lastBet;
 
   public Auction() {
   }
@@ -52,5 +54,19 @@ public class Auction {
     this.authorName = authorName;
   }
 
+  public String getDescription() {
+    return description;
+  }
 
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public String getLastBet() {
+    return lastBet;
+  }
+
+  public void setLastBet(String lastBet) {
+    this.lastBet = lastBet;
+  }
 }

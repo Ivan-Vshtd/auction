@@ -7,3 +7,15 @@ table {
   margin-left: 3%;
   margin-top: 1%;
 }
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.example-card {
+  width: 200px;
+  margin-left: 3%;
+  margin-top: 3%;
+}
+.mat-card-title{
+  font-size: 16px;
+}

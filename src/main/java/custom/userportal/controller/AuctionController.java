@@ -11,6 +11,7 @@ import reactor.core.publisher.Mono;
  * @author iveshtard
  * @since 1/4/2019
  */
+
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping("user-portal/auctions")
@@ -33,5 +34,10 @@ public class AuctionController {
   public Mono<Auction> addAuction(@RequestBody Auction auction)
   {
     return auctionService.addAuction(auction);
+  }
+
+  @DeleteMapping(path = "/{id}")
+  public Mono<Auction> delete(@PathVariable String id){
+    return auctionService.delete(id);
   }
 }

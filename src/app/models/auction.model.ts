@@ -3,4 +3,6 @@ export class Auction {
   name: string;
   viewId: string;
   authorName: string;
+  description: string;
+  lastBet: string;
 }
